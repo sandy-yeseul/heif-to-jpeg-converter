@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,11 +33,30 @@
       padding: 48px 16px 80px;
     }
 
-    /* Header */
-    header {
-      text-align: center;
-      margin-bottom: 40px;
+    .top-bar {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
     }
+
+    #lang-toggle {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: color .15s, border-color .15s;
+      letter-spacing: .04em;
+    }
+
+    #lang-toggle:hover { color: var(--text); border-color: var(--accent); }
+
+    header { text-align: center; margin-bottom: 40px; }
 
     .logo {
       display: inline-flex;
@@ -61,14 +80,8 @@
     }
 
     h1 span { color: var(--accent); }
+    .subtitle { margin-top: 10px; color: var(--text-muted); font-size: 15px; }
 
-    .subtitle {
-      margin-top: 10px;
-      color: var(--text-muted);
-      font-size: 15px;
-    }
-
-    /* Card */
     .card {
       width: 100%;
       max-width: 680px;
@@ -78,7 +91,6 @@
       overflow: hidden;
     }
 
-    /* Dropzone */
     #dropzone {
       display: flex;
       flex-direction: column;
@@ -91,18 +103,10 @@
       transition: background .15s;
     }
 
-    #dropzone:hover, #dropzone.drag-over {
-      background: var(--surface2);
-    }
-
+    #dropzone:hover, #dropzone.drag-over { background: var(--surface2); }
     #dropzone.drag-over { border-color: var(--accent); }
 
-    .drop-icon {
-      width: 48px; height: 48px;
-      color: var(--accent);
-      opacity: .8;
-    }
-
+    .drop-icon { width: 48px; height: 48px; color: var(--accent); opacity: .8; }
     .drop-label { font-size: 15px; font-weight: 500; }
     .drop-sub { font-size: 13px; color: var(--text-muted); }
 
@@ -117,7 +121,6 @@
       letter-spacing: .05em;
     }
 
-    /* Controls */
     .controls {
       display: flex;
       flex-wrap: wrap;
@@ -127,20 +130,12 @@
       align-items: center;
     }
 
-    .control-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
+    .control-group { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
     .control-group label { white-space: nowrap; }
 
     input[type="range"] {
       -webkit-appearance: none;
-      width: 100px;
-      height: 4px;
+      width: 100px; height: 4px;
       border-radius: 2px;
       background: var(--border);
       outline: none;
@@ -154,12 +149,7 @@
       cursor: pointer;
     }
 
-    #quality-value {
-      font-weight: 600;
-      color: var(--text);
-      min-width: 24px;
-      text-align: right;
-    }
+    #quality-value { font-weight: 600; color: var(--text); min-width: 24px; text-align: right; }
 
     select {
       background: var(--surface2);
@@ -172,18 +162,12 @@
       cursor: pointer;
     }
 
-    /* File list */
-    #file-list {
-      min-height: 80px;
-      max-height: 360px;
-      overflow-y: auto;
-    }
+    #file-list { min-height: 80px; max-height: 360px; overflow-y: auto; }
 
     #empty-state {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
       padding: 40px;
       color: var(--text-muted);
       font-size: 14px;
@@ -201,148 +185,79 @@
     .file-item:last-child { border-bottom: none; }
     .file-item:hover { background: var(--surface2); }
 
-    .file-icon {
-      width: 36px; height: 36px;
-      flex-shrink: 0;
-      color: var(--text-muted);
-    }
-
+    .file-icon { width: 36px; height: 36px; flex-shrink: 0; color: var(--text-muted); }
     .file-icon svg { width: 100%; height: 100%; }
 
-    .file-thumb {
-      width: 36px; height: 36px;
-      object-fit: cover;
-      border-radius: 6px;
-      flex-shrink: 0;
-    }
+    .file-thumb { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
 
-    .file-info {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .file-name {
-      font-size: 14px;
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
+    .file-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .file-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .file-meta { font-size: 12px; color: var(--text-muted); }
 
-    .file-status {
-      font-size: 12px;
-      padding: 3px 9px;
-      border-radius: 20px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .status-pending  { background: var(--surface2); color: var(--text-muted); }
+    .file-status { font-size: 12px; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+    .status-pending    { background: var(--surface2); color: var(--text-muted); }
     .status-converting { background: rgba(251,191,36,.12); color: var(--yellow); }
-    .status-done     { background: rgba(62,207,142,.12); color: var(--green); }
-    .status-error    { background: rgba(248,113,113,.12); color: var(--red); }
+    .status-done       { background: rgba(62,207,142,.12); color: var(--green); }
+    .status-error      { background: rgba(248,113,113,.12); color: var(--red); }
 
     .dl-single {
-      font-size: 16px;
-      color: var(--accent);
-      text-decoration: none;
-      padding: 2px 6px;
-      border-radius: 6px;
-      transition: background .1s;
+      font-size: 16px; color: var(--accent); text-decoration: none;
+      padding: 2px 6px; border-radius: 6px; transition: background .1s;
     }
-
     .dl-single:hover { background: var(--surface2); }
 
     .remove-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 13px;
-      padding: 4px 6px;
-      border-radius: 6px;
-      flex-shrink: 0;
-      transition: color .1s, background .1s;
+      background: none; border: none; color: var(--text-muted);
+      cursor: pointer; font-size: 13px; padding: 4px 6px;
+      border-radius: 6px; flex-shrink: 0; transition: color .1s, background .1s;
     }
-
     .remove-btn:hover { color: var(--red); background: rgba(248,113,113,.1); }
 
-    /* Stats */
     #stats {
       display: none;
-      font-size: 13px;
-      color: var(--green);
+      font-size: 13px; color: var(--green);
       padding: 10px 20px;
       border-top: 1px solid var(--border);
       background: rgba(62,207,142,.05);
     }
 
-    /* Actions */
-    .actions {
-      display: flex;
-      gap: 10px;
-      padding: 16px 20px;
-      border-top: 1px solid var(--border);
-    }
+    .actions { display: flex; gap: 10px; padding: 16px 20px; border-top: 1px solid var(--border); }
 
     button {
-      padding: 10px 20px;
-      font-size: 14px;
-      font-weight: 600;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
+      padding: 10px 20px; font-size: 14px; font-weight: 600;
+      border-radius: 8px; border: none; cursor: pointer;
       transition: opacity .15s, background .15s;
     }
 
     button:disabled { opacity: .35; cursor: not-allowed; }
 
-    #convert-btn {
-      flex: 1;
-      background: var(--accent);
-      color: #fff;
-    }
-
+    #convert-btn { flex: 1; background: var(--accent); color: #fff; }
     #convert-btn:not(:disabled):hover { background: var(--accent-hover); }
 
-    #download-btn {
-      background: var(--surface2);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
+    #download-btn { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
     #download-btn:not(:disabled):hover { border-color: var(--accent); color: var(--accent); }
 
-    /* Footer */
-    footer {
-      margin-top: 32px;
-      font-size: 12px;
-      color: var(--text-muted);
-      text-align: center;
-    }
-
+    footer { margin-top: 32px; font-size: 12px; color: var(--text-muted); text-align: center; line-height: 1.8; }
     footer a { color: var(--text-muted); }
     footer a:hover { color: var(--text); }
 
-    /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
   </style>
 </head>
 <body>
+  <div class="top-bar">
+    <button id="lang-toggle">한국어</button>
+  </div>
+
   <header>
     <div class="logo">
       <span class="logo-dot"></span>
-      HEIF Converter
+      <span id="logo-text">HEIF Converter</span>
     </div>
-    <h1>HEIF · HEIC to <span>JPEG</span></h1>
-    <p class="subtitle">브라우저에서 바로 변환 — 서버 전송 없음, 완전 오프라인</p>
+    <h1><span id="title-plain">HEIF · HEIC to </span><span id="title-accent">JPEG</span></h1>
+    <p class="subtitle" id="subtitle">Convert in your browser — no server, no upload, fully offline</p>
   </header>
 
   <div class="card">
@@ -351,21 +266,21 @@
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
       </svg>
-      <span class="drop-label">파일을 드래그하거나 클릭하여 선택</span>
-      <span class="drop-sub">여러 파일 동시 선택 가능</span>
+      <span class="drop-label" id="drop-label">Drag files here or click to select</span>
+      <span class="drop-sub" id="drop-sub">Multiple files supported</span>
       <span class="badge">.HEIC &nbsp;·&nbsp; .HEIF &nbsp;·&nbsp; .HIF</span>
     </div>
 
     <div class="controls">
       <div class="control-group">
-        <label for="quality">품질</label>
+        <label for="quality" id="control-quality-label">Quality</label>
         <input type="range" id="quality" min="50" max="95" value="90" />
         <span id="quality-value">90</span>
       </div>
       <div class="control-group">
-        <label for="max-size">최대 해상도</label>
+        <label for="max-size" id="control-maxsize-label">Max resolution</label>
         <select id="max-size">
-          <option value="0">원본 유지</option>
+          <option value="0" id="maxsize-original">Original</option>
           <option value="4096">4096px</option>
           <option value="2048">2048px</option>
           <option value="1440">1440px</option>
@@ -375,20 +290,23 @@
     </div>
 
     <div id="file-list">
-      <div id="empty-state">파일을 추가하면 여기에 표시됩니다</div>
+      <div id="empty-state"><span id="empty-state-text">Files will appear here once added</span></div>
     </div>
 
     <div id="stats"></div>
 
     <div class="actions">
-      <button id="convert-btn" disabled>변환 시작</button>
-      <button id="download-btn" disabled>전체 다운로드 (ZIP)</button>
+      <button id="convert-btn" disabled>Convert</button>
+      <button id="download-btn" disabled>Download All (ZIP)</button>
     </div>
   </div>
 
   <footer>
-    <p>모든 처리는 브라우저 내에서 이루어집니다. 파일이 외부 서버로 전송되지 않습니다.</p>
-    <p style="margin-top:6px">Powered by <a href="https://github.com/strukturag/libheif" target="_blank">libheif</a> · MIT License</p>
+    <p id="footer-privacy">All processing happens in your browser. Files are never sent to a server.</p>
+    <p style="margin-top:6px">
+      <span id="footer-powered">Powered by</span>
+      <a href="https://github.com/strukturag/libheif" target="_blank">libheif</a> · MIT License
+    </p>
   </footer>
 
   <input type="file" id="file-input" accept=".heic,.heif,.hif" multiple hidden />

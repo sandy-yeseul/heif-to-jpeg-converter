@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   base: process.env.NODE_ENV === "production" ? "/heif-to-jpeg-converter/" : "./",
@@ -8,5 +8,9 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ["libheif-js"],
+  },
+  test: {
+    environment: "jsdom",
+    include: ["src/__tests__/**/*.test.ts"],
   },
 });

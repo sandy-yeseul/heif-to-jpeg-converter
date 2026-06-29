@@ -1,9 +1,9 @@
 import JSZip from "jszip";
 import { convertHeifToJpeg, ConvertResult } from "./converter";
+import { Lang, detectLang, setLang, t } from "./i18n";
+import { formatSize, isHeifFile } from "./utils";
 
-const ACCEPTED_EXTENSIONS = /\.(heic|heif|hif)$/i;
-
-interface FileEntry {
+export interface FileEntry {
   file: File;
   status: "pending" | "converting" | "done" | "error";
   result?: ConvertResult;
@@ -11,6 +11,8 @@ interface FileEntry {
   itemEl?: HTMLElement;
 }
 
+// --- State ---
+let lang: Lang = detectLang();
 const entries: FileEntry[] = [];
 
 // --- DOM refs ---
@@ -24,6 +26,46 @@ const downloadBtn = document.getElementById("download-btn") as HTMLButtonElement
 const fileList = document.getElementById("file-list")!;
 const emptyState = document.getElementById("empty-state")!;
 const statsEl = document.getElementById("stats")!;
+const langToggle = document.getElementById("lang-toggle") as HTMLButtonElement;
+
+// --- i18n ---
+function applyLang() {
+  document.documentElement.lang = lang;
+
+  const set = (id: string, key: Parameters<typeof t>[1]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t(lang, key) as string;
+  };
+
+  set("logo-text", "header.logo");
+  set("title-plain", "header.title.plain");
+  set("title-accent", "header.title.accent");
+  set("subtitle", "header.subtitle");
+  set("drop-label", "drop.label");
+  set("drop-sub", "drop.sub");
+  set("control-quality-label", "control.quality");
+  set("control-maxsize-label", "control.maxsize");
+  set("maxsize-original", "maxsize.original");
+  set("empty-state-text", "file.empty");
+  set("convert-btn", "btn.convert");
+  set("download-btn", "btn.download");
+  set("footer-privacy", "footer.privacy");
+  set("footer-powered", "footer.powered");
+
+  langToggle.textContent = lang === "en" ? "한국어" : "English";
+
+  for (const entry of entries) {
+    if (entry.itemEl) setItemStatus(entry);
+  }
+
+  updateButtons();
+}
+
+langToggle.addEventListener("click", () => {
+  lang = lang === "en" ? "ko" : "en";
+  setLang(lang);
+  applyLang();
+});
 
 // --- Quality slider ---
 qualitySlider.addEventListener("input", () => {
@@ -55,7 +97,7 @@ fileInput.addEventListener("change", () => {
 
 // --- Add files ---
 function addFiles(files: File[]) {
-  const heifFiles = files.filter((f) => ACCEPTED_EXTENSIONS.test(f.name));
+  const heifFiles = files.filter(isHeifFile);
   if (heifFiles.length === 0) return;
 
   for (const file of heifFiles) {
@@ -68,12 +110,6 @@ function addFiles(files: File[]) {
 
   emptyState.style.display = entries.length ? "none" : "flex";
   updateButtons();
-}
-
-function formatSize(bytes: number) {
-  return bytes >= 1_048_576
-    ? (bytes / 1_048_576).toFixed(1) + " MB"
-    : (bytes / 1024).toFixed(0) + " KB";
 }
 
 function createFileItem(entry: FileEntry): HTMLElement {
@@ -90,9 +126,9 @@ function createFileItem(entry: FileEntry): HTMLElement {
       <span class="file-meta">${formatSize(entry.file.size)}</span>
     </div>
     <div class="file-status status-pending">
-      <span class="status-text">대기 중</span>
+      <span class="status-text"></span>
     </div>
-    <button class="remove-btn" aria-label="Remove">✕</button>
+    <button class="remove-btn" aria-label="${t(lang, "btn.remove.label")}">✕</button>
   `;
 
   el.querySelector(".remove-btn")!.addEventListener("click", (e) => {
@@ -104,43 +140,49 @@ function createFileItem(entry: FileEntry): HTMLElement {
     updateButtons();
   });
 
+  setItemStatus(entry);
   return el;
 }
 
 function setItemStatus(entry: FileEntry) {
-  const el = entry.itemEl!;
+  const el = entry.itemEl;
+  if (!el) return;
   const statusEl = el.querySelector(".file-status")!;
   const textEl = statusEl.querySelector(".status-text")!;
 
   statusEl.className = "file-status";
 
-  if (entry.status === "converting") {
+  if (entry.status === "pending") {
+    statusEl.classList.add("status-pending");
+    textEl.textContent = t(lang, "file.status.pending") as string;
+  } else if (entry.status === "converting") {
     statusEl.classList.add("status-converting");
-    textEl.textContent = "변환 중…";
+    textEl.textContent = t(lang, "file.status.converting") as string;
   } else if (entry.status === "done" && entry.result) {
     statusEl.classList.add("status-done");
     const saved = Math.round((1 - entry.result.convertedSize / entry.result.originalSize) * 100);
-    textEl.textContent = `완료 · ${formatSize(entry.result.convertedSize)} (${saved}% 절약)`;
+    const doneFn = t(lang, "file.status.done") as (size: string, saved: number) => string;
+    textEl.textContent = doneFn(formatSize(entry.result.convertedSize), saved);
 
-    // Thumbnail preview
-    const url = URL.createObjectURL(entry.result.blob);
-    const img = document.createElement("img");
-    img.src = url;
-    img.className = "file-thumb";
-    img.onload = () => URL.revokeObjectURL(url);
-    el.querySelector(".file-icon")!.replaceWith(img);
+    if (!el.querySelector(".file-thumb")) {
+      const url = URL.createObjectURL(entry.result.blob);
+      const img = document.createElement("img");
+      img.src = url;
+      img.className = "file-thumb";
+      img.onload = () => URL.revokeObjectURL(url);
+      el.querySelector(".file-icon")!.replaceWith(img);
 
-    // Single download button
-    const dlBtn = document.createElement("a");
-    dlBtn.className = "dl-single";
-    dlBtn.textContent = "↓";
-    dlBtn.title = "다운로드";
-    dlBtn.href = url;
-    dlBtn.download = entry.result.name;
-    el.querySelector(".remove-btn")!.before(dlBtn);
+      const dlBtn = document.createElement("a");
+      dlBtn.className = "dl-single";
+      dlBtn.textContent = "↓";
+      dlBtn.title = t(lang, "btn.download.single.title") as string;
+      dlBtn.href = url;
+      dlBtn.download = entry.result.name;
+      el.querySelector(".remove-btn")!.before(dlBtn);
+    }
   } else if (entry.status === "error") {
     statusEl.classList.add("status-error");
-    textEl.textContent = `오류: ${entry.error}`;
+    textEl.textContent = `${t(lang, "file.status.error")}: ${entry.error}`;
   }
 }
 
@@ -150,12 +192,15 @@ function updateButtons() {
   convertBtn.disabled = !hasPending;
   downloadBtn.disabled = !hasDone;
 
-  const doneCount = entries.filter((e) => e.status === "done").length;
-  if (doneCount > 0) {
-    const totalOrig = entries.filter((e) => e.status === "done").reduce((s, e) => s + e.file.size, 0);
-    const totalConv = entries.filter((e) => e.status === "done" && e.result).reduce((s, e) => s + e.result!.convertedSize, 0);
+  const done = entries.filter((e) => e.status === "done" && e.result);
+  if (done.length > 0) {
+    const totalOrig = done.reduce((s, e) => s + e.file.size, 0);
+    const totalConv = done.reduce((s, e) => s + e.result!.convertedSize, 0);
     const saved = Math.round((1 - totalConv / totalOrig) * 100);
-    statsEl.textContent = `${doneCount}개 변환 완료 · ${formatSize(totalOrig)} → ${formatSize(totalConv)} (${saved}% 절약)`;
+    const summaryFn = t(lang, "stats.summary") as (
+      count: number, origSize: string, convSize: string, saved: number
+    ) => string;
+    statsEl.textContent = summaryFn(done.length, formatSize(totalOrig), formatSize(totalConv), saved);
     statsEl.style.display = "block";
   } else {
     statsEl.style.display = "none";
@@ -204,7 +249,7 @@ downloadBtn.addEventListener("click", async () => {
     return;
   }
 
-  downloadBtn.textContent = "ZIP 압축 중…";
+  downloadBtn.textContent = t(lang, "btn.download.zipping") as string;
   downloadBtn.disabled = true;
 
   const zip = new JSZip();
@@ -218,6 +263,9 @@ downloadBtn.addEventListener("click", async () => {
   a.download = "converted.zip";
   a.click();
 
-  downloadBtn.textContent = "전체 다운로드 (ZIP)";
+  downloadBtn.textContent = t(lang, "btn.download") as string;
   downloadBtn.disabled = false;
 });
+
+// --- Init ---
+applyLang();
