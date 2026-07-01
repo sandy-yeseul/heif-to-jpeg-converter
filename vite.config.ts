@@ -6,8 +6,9 @@ export default defineConfig({
     outDir: "dist",
     assetsInlineLimit: 0,
   },
-  optimizeDeps: {
-    exclude: ["libheif-js"],
+  define: {
+    __BUNDLED_DEV__: false,
+    __SERVER_FORWARD_CONSOLE__: false,
   },
   test: {
     environment: "jsdom",
