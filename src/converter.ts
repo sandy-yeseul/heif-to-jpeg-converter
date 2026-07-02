@@ -62,15 +62,7 @@ export async function convertHeifToJpeg(
   const width = image.get_width();
   const height = image.get_height();
 
-  const imageData = await new Promise<ImageData>((resolve, reject) => {
-    image.display({ data: new Uint8ClampedArray(width * height * 4), width, height }, (result: ImageData | null) => {
-      if (!result) {
-        reject(new Error("Failed to decode image"));
-        return;
-      }
-      resolve(result);
-    });
-  });
+  const imageData = new ImageData(new Uint8ClampedArray(width * height * 4), width, height);
 
   const canvas = renderImageToCanvas(imageData, opts.maxSize);
 
