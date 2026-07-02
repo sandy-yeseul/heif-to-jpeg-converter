@@ -1,6 +1,9 @@
 {
   "name": "heif-to-jpeg-converter",
   "version": "1.0.0",
+  "engines": {
+    "node": "22.20.0"
+  },
   "description": "Browser-based HEIF/HEIC to JPEG converter — no server required",
   "scripts": {
     "dev": "vite",
