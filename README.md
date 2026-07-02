@@ -4,7 +4,7 @@ A browser-based tool that converts **HEIF / HEIC** images (from iPhone, iPad, an
 
 🔗 **[Live Demo](https://sandy-yeseul.github.io/heif-to-jpeg-converter/)** · Built with TypeScript + Vite + libheif (WebAssembly)
 
-> **Built with AI pair programming** — developed using [Claude Code](https://claude.ai/code) (Anthropic). The architecture, logic, and design decisions were driven by the developer; Claude assisted with implementation, refactoring, and code review.
+> Built with [Claude Code](https://claude.ai/code) as an AI pair programmer — architecture and decisions by the developer.
 
 ---
 
@@ -57,6 +57,12 @@ No data ever leaves your machine.
 
 ---
 
+## CI/CD
+
+[GitHub Actions](.github/workflows/deploy.yml) runs on every push to `main`: install → test → build → deploy to GitHub Pages. Set up from scratch to learn CI/CD.
+
+---
+
 ## Getting Started
 
 ```bash
@@ -75,9 +81,6 @@ npm test
 
 # Production build → dist/
 npm run build
-
-# Deploy to GitHub Pages
-npm run deploy
 ```
 
 Open `dist/index.html` directly in a browser — no web server needed.
