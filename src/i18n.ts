@@ -7,6 +7,8 @@ export const translations = {
     "header.title.plain": "HEIF · HEIC to ",
     "header.title.accent": "JPEG",
     "header.subtitle": "Convert in your browser — no server, no upload, fully offline",
+    "header.sample.download": "Download sample HEIC",
+    "header.sample.gallery": "View HEIC sample gallery",
 
     // Dropzone
     "drop.label": "Drag files here or click to select",
@@ -46,6 +48,8 @@ export const translations = {
     "header.title.plain": "HEIF · HEIC를 ",
     "header.title.accent": "JPEG로",
     "header.subtitle": "브라우저에서 바로 변환 — 서버 전송 없음, 완전 오프라인",
+    "header.sample.download": "샘플 HEIC 다운로드",
+    "header.sample.gallery": "HEIC 샘플 갤러리 보기",
 
     "drop.label": "파일을 드래그하거나 클릭하여 선택",
     "drop.sub": "여러 파일 동시 선택 가능",

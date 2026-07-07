@@ -82,6 +82,32 @@
     h1 span { color: var(--accent); }
     .subtitle { margin-top: 10px; color: var(--text-muted); font-size: 15px; }
 
+    .sample-links {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .sample-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .sample-link svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .sample-link:hover { color: var(--accent); border-color: var(--accent); background: var(--surface2); }
+    .sample-sep { color: var(--border); font-size: 13px; }
+
     .card {
       width: 100%;
       max-width: 680px;
@@ -258,8 +284,21 @@
     </div>
     <h1><span id="title-plain">HEIF · HEIC to </span><span id="title-accent">JPEG</span></h1>
     <p class="subtitle" id="subtitle">Convert in your browser — no server, no upload, fully offline</p>
-    <a href="%BASE_URL%samples/shelf-christmas-decoration.heic" download="sample.heic">Download sample HEIC</a>
-    <a href="https://heic.digital/samples/" target="_blank">View HEIC sample gallery</a>
+    <div class="sample-links">
+      <a class="sample-link" id="sample-download" href="%BASE_URL%samples/shelf-christmas-decoration.heic" download="sample.heic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M7.5 11.25L12 15.75m0 0l4.5-4.5M12 15.75V3"/>
+        </svg>
+        Download sample HEIC
+      </a>
+      <span class="sample-sep">·</span>
+      <a class="sample-link" id="sample-gallery" href="https://heic.digital/samples/" target="_blank" rel="noopener">
+        View HEIC sample gallery
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5H19.5V10.5M19.5 4.5L10.5 13.5M6 6H9M6 6V18H18V15" />
+        </svg>
+      </a>
+    </div>
   </header>
 
   <div class="card">

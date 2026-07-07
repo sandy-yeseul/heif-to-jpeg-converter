@@ -27,6 +27,8 @@ const fileList = document.getElementById("file-list")!;
 const emptyState = document.getElementById("empty-state")!;
 const statsEl = document.getElementById("stats")!;
 const langToggle = document.getElementById("lang-toggle") as HTMLButtonElement;
+const sampleDownloadLink = document.getElementById("sample-download")!;
+const sampleGalleryLink = document.getElementById("sample-gallery")!;
 
 // --- i18n ---
 function applyLang() {
@@ -37,10 +39,19 @@ function applyLang() {
     if (el) el.textContent = t(lang, key) as string;
   };
 
+  const setLinkText = (el: HTMLElement, key: Parameters<typeof t>[1]) => {
+    const textNode = Array.from(el.childNodes).find(
+      (n) => n.nodeType === Node.TEXT_NODE && n.textContent!.trim().length > 0
+    ) as Text | undefined;
+    if (textNode) textNode.data = ` ${t(lang, key) as string} `;
+  };
+
   set("logo-text", "header.logo");
   set("title-plain", "header.title.plain");
   set("title-accent", "header.title.accent");
   set("subtitle", "header.subtitle");
+  setLinkText(sampleDownloadLink, "header.sample.download");
+  setLinkText(sampleGalleryLink, "header.sample.gallery");
   set("drop-label", "drop.label");
   set("drop-sub", "drop.sub");
   set("control-quality-label", "control.quality");
