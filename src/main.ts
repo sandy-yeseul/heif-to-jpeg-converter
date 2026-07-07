@@ -27,6 +27,7 @@ const fileList = document.getElementById("file-list")!;
 const emptyState = document.getElementById("empty-state")!;
 const statsEl = document.getElementById("stats")!;
 const langToggle = document.getElementById("lang-toggle") as HTMLButtonElement;
+const sampleBtn =document.getElementById('sample-btn') as HTMLButtonElement;
 
 // --- i18n ---
 function applyLang() {
