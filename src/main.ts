@@ -176,7 +176,7 @@ function setItemStatus(entry: FileEntry) {
       dlBtn.className = "dl-single";
       dlBtn.textContent = "↓";
       dlBtn.title = t(lang, "btn.download.single.title") as string;
-      dlBtn.href = url;
+      dlBtn.href = URL.createObjectURL(entry.result!.blob);
       dlBtn.download = entry.result.name;
       el.querySelector(".remove-btn")!.before(dlBtn);
     }
